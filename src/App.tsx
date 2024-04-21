@@ -1,33 +1,66 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import AlertMessage from './components/AlertMMessage';
+import { CategoryType, UserType } from './types/index';
 import Navigation from './components/Navigation';
 import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
+import Home from './views/Home';
+import Login from './views/Login';
+import SignUp from './views/SignUp';
+import {getMe} from './lib/apiWrapper';
+import EditPost from './views/EditPost';
 
 
 export default function App(){
-    const firstName: string = 'Brian';
-    const lastName: string = 'Stanton';
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const posts: {id:number, title:string}[] = [
-        {id: 1, title: 'Happy Monday'},
-        {id: 2, title: 'React Rules!'},
-        {id: 3, title: 'Spring has Sprung'}
-    ]
-
-
-    const handleClick = () => {
-        // console.log('The button has been clicked');
-        setIsLoggedIn(!isLoggedIn);
+    const [currentUser, setCurrentUser] = useState<UserType|null>(null);
+    const [alertMessage, setAlertMessage] = useState<string|undefined>(undefined);
+    const [category, setCategory] = useState<CategoryType|undefined>(undefined);
+   
+    useEffect(() => {
+        async function getLoggedInUser(){
+            if(isLoggedIn){
+                const token = localStorage.getItem('token')||'';
+                if (token){
+                    const response = await getMe(token);
+                    if (response.data){
+                        setCurrentUser(response.data)
+                        localStorage.setItem('currentUser', JSON.stringify(response.data))
+                        console.log(response.data);
+                    } else {
+                        setLoggedIn(false);
+                        console.warn(response.data);
+                    }
+                }
+            }
+        }
+        getLoggedInUser();
+    }, [isLoggedIn])
+    const flashMessage = (newMessage:string|undefined, newCategory:CategoryType|undefined) => {
+        setAlertMessage(newMessage);
+        setCategory(newCategory);
     }
-
+    const logUserIn = () => {
+        setIsLoggedIn(true);
+    }
+    const logUserOut = () => {
+        setIsLoggedIn(false);
+        setCurrentUser(null);
+        localStorage.removeItem('token');
+        localStorage.removeItem('tokenExp');
+        flashMessage('You have successfully logged out', 'success');
+    }
     return (
         <>
-            <Navigation isLoggedIn={isLoggedIn}/>
+            <Navigation isLoggedIn={isLoggedIn} logUserOut={logUserOut}/>
             <Container>
-                <h1>Hello World</h1>
-                <Button variant='primary' onClick={handleClick}>Click Me!</Button>
-                <h2>{isLoggedIn ? `Welcome Back ${firstName} ${lastName}` : 'Please Log In or Sign Up'}</h2>
-                {posts.map( p => <h4 key={p.id}>{p.title}</h4> )}
+                {alertMessage && <AlertMessage message={alertMessage} category={category} flashMessage={flashMessage}/>}
+                <Routes>
+                    <Route path='/' element={<Home isLoggedIn={isLoggedIn} currentUser={currentUser} flashMessage={flashMessage} /> } />
+                    <Route path='/signup' element={<SignUp flashMessage={flashMessage}/> } />
+                    <Route path='/login' element={<Login flashMessage={flashMessage} logUserIn={logUserIn}/> } />
+                    <Route path='/edit/:postId' element={<EditPost flashMessage={flashMessage} currentUser={currentUser} />} /> <Route path='/edit/:postId' element={<EditPost flashMessage={flashMessage} currentUser={currentUser} />} />
+                </Routes>
             </Container>
         </>
     )
