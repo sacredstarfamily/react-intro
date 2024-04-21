@@ -7,12 +7,12 @@ import Container from 'react-bootstrap/Container';
 import Home from './views/Home';
 import Login from './views/Login';
 import SignUp from './views/SignUp';
-import {getMe} from './lib/apiWrapper';
+import {getMe} from './lib/apiWrapper.ts';
 import EditPost from './views/EditPost';
 
 
 export default function App(){
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(true);
     const [currentUser, setCurrentUser] = useState<UserType|null>(null);
     const [alertMessage, setAlertMessage] = useState<string|undefined>(undefined);
     const [category, setCategory] = useState<CategoryType|undefined>(undefined);
@@ -28,7 +28,7 @@ export default function App(){
                         localStorage.setItem('currentUser', JSON.stringify(response.data))
                         console.log(response.data);
                     } else {
-                        setLoggedIn(false);
+                        setIsLoggedIn(false);
                         console.warn(response.data);
                     }
                 }
