@@ -29,7 +29,7 @@ export default function Navigation({ isLoggedIn, logUserOut }: NavigationProps){
                         ) : (
                             <>
                                 <Nav.Link as={Link} to='signup'>Sign Up</Nav.Link>
-                                <Nav.Link href='login'>Log In</Nav.Link>
+                                <Nav.Link as={Link} to='login'>Log In</Nav.Link>
                             </>
                         )}
                     </Nav>
