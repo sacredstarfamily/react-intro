@@ -19,20 +19,21 @@ export default function App(){
    
     useEffect(() => {
         async function getLoggedInUser(){
-            if(isLoggedIn){
+            
                 const token = localStorage.getItem('token')||'';
                 if (token){
                     const response = await getMe(token);
                     if (response.data){
                         setCurrentUser(response.data)
                         localStorage.setItem('currentUser', JSON.stringify(response.data))
+                        setIsLoggedIn(true);
                         console.log(response.data);
                     } else {
                         setIsLoggedIn(false);
                         console.warn(response.data);
                     }
                 }
-            }
+            
         }
         getLoggedInUser();
     }, [isLoggedIn])
