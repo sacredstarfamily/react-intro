@@ -12,7 +12,7 @@ import EditPost from './views/EditPost';
 
 
 export default function App(){
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useState(False);
     const [currentUser, setCurrentUser] = useState<UserType|null>(null);
     const [alertMessage, setAlertMessage] = useState<string|undefined>(undefined);
     const [category, setCategory] = useState<CategoryType|undefined>(undefined);
@@ -28,7 +28,7 @@ export default function App(){
                         localStorage.setItem('currentUser', JSON.stringify(response.data))
                         console.log(response.data);
                     } else {
-                        setIsLoggedIn(false);
+                        setIsLoggedIn(False);
                         console.warn(response.data);
                     }
                 }

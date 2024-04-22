@@ -23,13 +23,13 @@ export default function Navigation({ isLoggedIn, logUserOut }: NavigationProps){
                     <Nav className='me-auto'>
                         {isLoggedIn ? (
                             <>
-                                <Nav.Link href='/'>Create Post</Nav.Link>
-                                <Nav.Link href='/' onClick={()=>{logUserOut()}}>Log Out</Nav.Link>
+                                <Nav.Link href=''>Create Post</Nav.Link>
+                                <Nav.Link href='' onClick={()=>{logUserOut()}}>Log Out</Nav.Link>
                             </>
                         ) : (
                             <>
-                                <Nav.Link as={Link} to='/signup'>Sign Up</Nav.Link>
-                                <Nav.Link href='/login'>Log In</Nav.Link>
+                                <Nav.Link as={Link} to='signup'>Sign Up</Nav.Link>
+                                <Nav.Link href='login'>Log In</Nav.Link>
                             </>
                         )}
                     </Nav>
