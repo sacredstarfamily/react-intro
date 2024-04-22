@@ -24,7 +24,7 @@ export default function Navigation({ isLoggedIn, logUserOut }: NavigationProps){
                         {isLoggedIn ? (
                             <>
                                 <Nav.Link href='/'>Create Post</Nav.Link>
-                                <Nav.Link href='' onClick={()=>{logUserOut()}}>Log Out</Nav.Link>
+                                <Nav.Link href='/' onClick={()=>{logUserOut()}}>Log Out</Nav.Link>
                             </>
                         ) : (
                             <>
